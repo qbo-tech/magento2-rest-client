@@ -13,6 +13,13 @@
       "args": "start",
       "log_date_format": "YYYY-MM-DD HH:mm:ss",
       "ignore_watch": ["node_modules"]
+    },
+    {
+      "name": "o2m1",
+      "script": "./dist/worker/order_to_magento.js",
+      "args": "start",
+      "log_date_format": "YYYY-MM-DD HH:mm:ss",
+      "ignore_watch": ["node_modules"]
     }
   ]
 }
