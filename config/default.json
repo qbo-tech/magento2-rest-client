@@ -117,18 +117,30 @@
   "registeredExtensions": [
     "mailchimp-subscribe",
     "example-magento-api",
-    "cms-data"
+    "cms-data",
+    "mail-service"
   ],
   "extensions": {
     "mailchimp": {
       "listId": "e06875a7e1",
       "apiKey": "a9a3318ea7d30f5c5596bd4a78ae0985-us3",
       "apiUrl": "https://us3.api.mailchimp.com/3.0"
+    },
+    "mailService": {
+      "transport": {
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "secure": true,
+        "user": "vuestorefront",
+        "pass": "vuestorefront.io"
+      },
+      "targetAddressWhitelist": ["contributors@vuestorefront.io"],
+      "secretString": "__THIS_IS_SO_SECRET__"
     }
   },
   "magento2": {
-    "url": "http://magento2.demo-1.xyz.com",
-    "imgUrl": "http://localhost:8080/media/catalog/product",
+    "url": "http://demo-magento2.vuestorefront.io/",
+    "imgUrl": "http://demo-magento2.vuestorefront.io/media/catalog/product",
     "assetPath": "/../var/magento2-sample-data/pub/media",
     "magentoUserName": "",
     "magentoUserPassword": "",
@@ -160,7 +172,7 @@
     "concurrency": 0,
     "counters": {
       "queue": 2,
-      "process": 4 
+      "process": 4
     },
     "simd": true,
     "keepDownloads": true
