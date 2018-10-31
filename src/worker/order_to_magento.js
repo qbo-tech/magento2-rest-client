@@ -23,7 +23,6 @@ redisClient.on('error', function (err) { // workaround for https://github.com/No
     redisClient = Redis.createClient(config.redis); // redis client
 });
 
-const CommandRouter = require('command-router');
 const cli = CommandRouter();
 
 cli.option({
