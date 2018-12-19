@@ -1,42 +1,31 @@
-import CommandRouter from 'command-router'
-
+const program = require('commander')
 const config = require('config').redis
 const kue = require('kue')
 
-const cli = CommandRouter()
-
-cli.option({
-  name: 'port',
-  alias: 'p',
-  default: 3000,
-  type: Number
-})
-
-cli.option({
-  name: 'prefix',
-  alias: 'q',
-  default: 'q',
-  type: String
-})
-
-cli.command('dashboard', () => {
-
-  kue.createQueue({
-    redis: {
-      host: config.host,
-      port: config.port,
-      db: config.db
-    },
-    prefix: cli.options.prefix
+program
+  .option('-p, --port', 'port to listen to')
+  .option('-q, --prefix', 'prefix of key names used by Redis', 'q')
+  .command('dashboard')
+  .action(function(cmd, options) {
+    kue.createQueue({
+      redis: {
+        host: config.host,
+        port: config.port,
+        db: config.db
+      }
+    })
+    kue.app.listen(cmd)
+    console.log("Kue started on " + cmd)
   })
 
-  kue.app.listen(cli.options.port)
-})
+program
+  .on('command:*', () => {
+    console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+    process.exit(1);
+  });
 
-cli.on('notfound', (action) => {
-  console.error(`I don't know how to: ${action}`)
-  process.exit(1)
-})
+program
+  .parse(process.argv)
 
 process.on('unhandledRejection', (reason, p) => {
   console.log(`Unhandled Rejection at: Promise ${p}, reason: ${reason}`)
@@ -45,5 +34,3 @@ process.on('unhandledRejection', (reason, p) => {
 process.on('uncaughtException', function(exception) {
   console.log(exception)
 })
-
-cli.parse(process.argv)

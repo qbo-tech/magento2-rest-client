@@ -46,7 +46,7 @@
             },
             "company": { "type": "string" },
             "telephone": { "type": "string" },
-            "postcode": { "type": "string", "minLength": 3,  "pattern": "[a-zA-Z0-9_]+" },
+            "postcode": { "type": "string", "minLength": 3},
             "city": { "type": "string", "pattern": "[a-zA-Z]+" },
             "firstname": { "type": "string", "pattern": "[a-zA-Z]+", "description": "First name" },
             "lastname": { "type": "string", "pattern": "[a-zA-Z]+" },

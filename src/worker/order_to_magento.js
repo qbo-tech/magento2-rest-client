@@ -3,6 +3,7 @@
  * Queue worker in charge of syncing the Sales order to Magento 1 via VSBridge Controller *
  */
 
+const program = require('commander');
 const kue = require('kue');
 const logger = require('./log');
 const countryMapper = require('../lib/countrymapper')
@@ -16,6 +17,7 @@ logger.info('> QUEUE CREATED')
 let numCPUs = require('os').cpus().length;
 
 const MagentoClient = require('magento1-vsbridge-client').MagentoClient;
+console.log(MagentoClient);
 
 const Redis = require('redis');
 let redisClient = Redis.createClient(config.redis); // redis client
@@ -23,13 +25,6 @@ redisClient.on('error', function (err) { // workaround for https://github.com/No
     redisClient = Redis.createClient(config.redis); // redis client
 });
 
-const cli = CommandRouter();
-
-cli.option({
-  name: 'partitions',
-  default: numCPUs,
-  type: Number
-});
 
 function isNumeric(val) {
   return Number(parseFloat(val)).toString() === val;
@@ -60,7 +55,7 @@ function processSingleOrder(orderData, config, job, done) {
   let isThisAuthOrder = parseInt(orderData.user_id) > 0
   const userId = orderData.user_id ? orderData.user_id : null;
 
-  let apiConfig = config.magento.api
+  let apiConfig = config.magento.vsbridge
   if (orderData.store_code) {
     if (config.availableStores.indexOf(orderData.store_code) >= 0) {
       console.log(":: STORE CODE: " + orderData.store_code);
@@ -84,7 +79,8 @@ function processSingleOrder(orderData, config, job, done) {
   logger.info(THREAD_ID + '> Cart Id', cartId)
 
     api.cart.pull(userId, cartId).then((serverItems) => {
-      
+      logger.info("CLIENT ITEMS: ", orderData.products)                                                                                                                                               
+                                                                                                                                               
       const clientItems = orderData.products
       const syncPromises = []
       logger.info(THREAD_ID + '> Sync between clientItems', clientItems.map((item) => { return { sku: item.sku, qty: item.qty, server_item_id: item.item_id, product_options: item.product_options }}))
@@ -218,8 +214,8 @@ function processSingleOrder(orderData, config, job, done) {
 
               api.order.create(userId, cartId, {
                 "paymentMethod": {
-                  "method": orderData.addressInformation.payment_method_code,
-                  "additional_data": orderData.addressInformation.payment_method_additional
+                  "method": orderData.payment_method_code,
+                  "additional_data": orderData.payment_method_additional
                 }
               }, isThisAuthOrder).then(result => {
                 logger.info(THREAD_ID, result)
@@ -287,23 +283,35 @@ function processSingleOrder(orderData, config, job, done) {
 }
 
 // RUN
-cli.command('start', () => { // default command is to run the service worker
-  let partition_count = cli.options.partitions;
-
-  logger.info('Starting KUE worker for "order" message ...');
-  queue.process('order', partition_count, (job,done) => {
+program
+  .command('start')
+  .option('--partitions <partitions>', 'number of partitions', numCPUs)
+  .action((cmd) => { // default command is to run the service worker
+  let partition_count = parseInt(cmd.partitions);
+  logger.info(`Starting KUE worker for "order" message [${partition_count}]...`);
+  queue.process('order', partition_count, (job, done) => {
     logger.info('Processing order: ' + job.data.title);
-    //logger.info(job.data.order);
     return processSingleOrder(job.data.order, config, job, done);
   });
-}); 
-
-cli.command('testAuth', () => {
-  processSingleOrder(require('../../var/testOrderAuth.json'), config, null, (err, result) => {});
 });
 
-cli.command('testAnon', () => {
-  processSingleOrder(require('../../var/testOrderAnon.json'), config, null, (err, result) => {});
-});
+program
+  .command('testAuth')
+  .action(() => {
+    processSingleOrder(require('../../var/testOrderAuth.json'), config, null, (err, result) => {});
+  });
 
-cli.parse(process.argv);
+program
+  .command('testAnon')
+  .action(() => {
+    processSingleOrder(require('../../var/testOrderAnon.json'), config, null, (err, result) => {});
+  });
+
+program
+  .on('command:*', () => {
+    console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+    process.exit(1);
+  });
+
+program
+  .parse(process.argv)
