@@ -20,11 +20,11 @@
     "dump_de": "npm run dump -- --input-index=vue_storefront_catalog_de --output-file=var/catalog_de.json",
     "kue": "node scripts/kue.js",
     "kue-dashboard": "npm run kue dashboard -- --port=3050",
+    "o2m1": "node src/worker/order_to_magento.js start",
     "o2m": "node src/worker/order_to_magento2.js start",
     "o2m-anon": "node src/worker/order_to_magento2.js testAnon",
     "o2m-auth": "node src/worker/order_to_magento2.js testAuth",
     "o2m-dev": "nodemon -w src/worker/order_to_magento2.js --exec \"node src/worker/order_to_magento2.js\"",
-    "o2m1": "node src/worker/order_to_magento.js start",
     "migrate": "node node_modules/migrate/bin/migrate",
     "prestart": "npm run -s build",
     "test": "eslint src",
@@ -96,7 +96,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^4.16.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.7"
   },
   "bugs": {
     "url": "https://github.com/DivanteLtd/vue-storefront-api/issues"
