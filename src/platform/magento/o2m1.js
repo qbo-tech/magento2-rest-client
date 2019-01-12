@@ -188,6 +188,8 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
             }
           }
 
+            logger.info(THREAD_ID + '< Order info', orderData)
+          
             logger.info(THREAD_ID + '< Billing info', billingAddressInfo)
             api.cart.billingAddress(userId, cartId, billingAddressInfo, isThisAuthOrder).then((result) => {
             logger.info(THREAD_ID + '< Billing address assigned', result)
@@ -197,10 +199,14 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
 
               if(job) job.progress(currentStep++, TOTAL_STEPS);
 
+              logger.info('PAYMENT DATA:');
+              logger.info(orderData.addressInformation.payment_method_code);
+              logger.info(orderData.addressInformation.payment_method_additional);
+
               api.order.create(userId, cartId, {
                 "paymentMethod": {
-                  "method": orderData.payment_method_code,
-                  "additional_data": orderData.payment_method_additional
+                  "method": orderData.addressInformation.payment_method_code,
+                  "additional_data": orderData.addressInformation.payment_method_additional
                 }
               }, isThisAuthOrder).then(result => {
                 logger.info(THREAD_ID, result)
