@@ -146,9 +146,10 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
               "lastname": billingAddr.lastname,
               "email": billingAddr.email,
               "regionCode": billingAddr.regionCode,
-              "regionId": billingAddr.regionId,
+              "regionId": billingAddr.region_id,
               "company": billingAddr.company,
-              "vatId": billingAddr.vat_id
+              "vatId": billingAddr.vat_id,
+              "neighborhood": billingAddr.neighborhood
             }
           }
 
@@ -163,9 +164,11 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
                 "firstname": shippingAddr.firstname,
                 "lastname": shippingAddr.lastname,
                 "email": shippingAddr.email,
-                "regionId": shippingAddr.regionId,
+                "regionId": shippingAddr.region_id,
                 "regionCode": shippingAddr.regionCode,
-                "company": shippingAddr.company
+                "company": shippingAddr.company,
+                "neighborhood": shippingAddr.neighborhood,
+                "address_references": shippingAddr.address_references
               },
 
               "billingAddress": {
@@ -177,10 +180,11 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
                 "firstname": billingAddr.firstname,
                 "lastname": billingAddr.lastname,
                 "email": billingAddr.email,
-                "regionId":  billingAddr.regionId,
+                "regionId":  billingAddr.region_id,
                 "regionCode": billingAddr.regionCode,
                 "company": billingAddr.company,
-                "vatId": billingAddr.vat_id
+                "vatId": billingAddr.vat_id,
+                "neighborhood": billingAddr.neighborhood
               },
               "shippingMethodCode": orderData.addressInformation.shipping_method_code,
               "shippingCarrierCode": orderData.addressInformation.shipping_carrier_code,
