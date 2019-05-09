@@ -40,9 +40,13 @@
             "region_id": { "type": "number" },
             "country_id": { "type": "string", "pattern": "[a-zA-Z]" },
             "street": {
-              "description": "Street name",
-              "minItems": 1,
-              "items": { "minLength": 1, "description": "Street name"}
+                "description": "Street data",
+                "minItems": 1,
+                "items": [
+                  { "minLength": 1, "description": "Street name" },
+                  { "minLength": 1, "description": "External number" },
+                  { "type": ["string", "number", "null"], "description": "Internal number" }
+                ]
             },
             "company": { "type": "string" },
             "telephone": { "type": "string" },
@@ -63,8 +67,13 @@
               "region_id": { "type": "number" },
               "country_id": { "type": "string", "pattern": "[a-zA-Z]" },
               "street": {
-                "minItems": 1,
-                "items": { "minLength": 1}
+                  "description": "Street data",
+                  "minItems": 1,
+                  "items": [
+                    { "minLength": 1, "description": "Street name" },
+                    { "minLength": 1, "description": "External number" },
+                    { "type": ["string", "number", "null"], "description": "Internal number" }
+                  ]
               },
               "company": { "type": "string" },
               "telephone": { "type": "string" },
