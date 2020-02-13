@@ -187,7 +187,7 @@ function processSingleOrder(orderData, config, job, done, logger = console) {
                 "neighborhood": billingAddr.neighborhood
               },
               "shippingMethodCode": orderData.addressInformation.shipping_method_code,
-              "shippingCarrierCode": orderData.addressInformation.shipping_carrier_code,
+              "shippingCarrierCode": orderData.addressInformation.shipping_carrier_code = "flatrate" ? "pengo_mailboxes" : orderData.addressInformation.shipping_carrier_code,
               "extensionAttributes": orderData.addressInformation.shippingExtraFields
             }
           }

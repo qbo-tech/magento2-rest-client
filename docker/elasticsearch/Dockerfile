@@ -5,4 +5,5 @@ RUN bin/elasticsearch-plugin remove x-pack --purge
 RUN elasticsearch-plugin install analysis-icu
 RUN elasticsearch-plugin install analysis-phonetic
 # Add your elasticsearch plugins setup here
-# Example: RUN elasticsearch-plugin install analysis-icu
+RUN elasticsearch-plugin install analysis-icu
+RUN elasticsearch-plugin install analysis-phonetic
