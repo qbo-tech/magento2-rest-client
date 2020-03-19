@@ -32,13 +32,12 @@ module.exports = ({ config, db }) => {
           console.error(err);
           return res.sendStatus(500);
         }
-
+        //return res.sendStatus(500);
         // 3. Return the payment ID to the client
         res.json({
           id: response.body.id
         });
-    });
-
+    }); 
   })
 
   api.post('/execute', (req, res) => {
@@ -64,11 +63,20 @@ module.exports = ({ config, db }) => {
         console.error(err);
         return res.sendStatus(500);
       }
+      if (response.statusCode == 200 && response.body.state == "approved") { 
+          // 4. Return a success response to the client
+          res.json({
+            status: 'success',
+   	    sale_id: response.body.transactions[0].related_resources[0].sale.id 
+          });
+      } else {
+          console.log("PayPal_Express_Execute_Payment_Failed")
+          console.log(response)
+          res.json({
+            status: 'failed'
+          });
 
-      // 4. Return a success response to the client
-      res.json({
-        status: 'success'
-      });
+      }
     });
 
   })
