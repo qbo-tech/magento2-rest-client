@@ -55,7 +55,11 @@ module.exports = ({ config, db }) => {
       },
       body: {
         payer_id: payerID,
-        transactions: req.body.transactions
+        transactions: [{
+            amount: req.body.transactions[0].amount,
+            notify_url: config.extensions.paypal.notify_url,
+            invoice_number: req.body.invoice_number ? req.body.invoice_number : null
+        }]
       },
       json: true
     }, function (err, response) {
