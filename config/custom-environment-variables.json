@@ -4,7 +4,7 @@
     "port": "BIND_PORT"
   },
   "elasticsearch": {
-    "host": "ELASTICSEARCH_HOST",
+    "host": "es2",
     "port": "ELASTICSEARCH_PORT"
   },
   "redis": {

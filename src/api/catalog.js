@@ -33,6 +33,8 @@ export default ({config, db}) => function (req, res, body) {
 	let requestBody = {}
 	if (req.method === 'GET') {
 		if (req.query.request) { // this is in fact optional
+                        console.log('Request:')
+                        console.log(req.query.request)
 			requestBody = JSON.parse(decodeURIComponent(req.query.request))
 			console.log(requestBody)
 		}
@@ -63,6 +65,7 @@ export default ({config, db}) => function (req, res, body) {
 
 	// pass the request to elasticsearch
 	let url = 'http://' + config.elasticsearch.host + ':' + config.elasticsearch.port + (req.query.request ? _updateQueryStringParameter(req.url, 'request', null) : req.url)
+        console.log(url)
 
 	// Check price tiers
 	if (config.usePriceTiers) {
@@ -88,6 +91,7 @@ export default ({config, db}) => function (req, res, body) {
 			pass: config.elasticsearch.password
 		},
 	}, function (_err, _res, _resBody) { // TODO: add caching layer to speed up SSR? How to invalidate products (checksum on the response BEFORE processing it)
+                console.log(_err);
 		if (_resBody && _resBody.hits && _resBody.hits.hits) { // we're signing up all objects returned to the client to be able to validate them when (for example order)
 
 			const factory = new ProcessorFactory(config)

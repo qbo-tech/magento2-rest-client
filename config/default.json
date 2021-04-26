@@ -8,7 +8,7 @@
     "useServerQueue": false
   },
   "elasticsearch": {
-    "host": "localhost",
+    "host": "es2",
     "port": 9200,
     "protocol": "http",
     "user": "elastic",
