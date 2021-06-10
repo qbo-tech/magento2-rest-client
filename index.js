@@ -16,6 +16,7 @@ var directory = require('./lib/directory');
 var cart = require('./lib/cart');
 var orders = require('./lib/orders');
 var reviews = require('./lib/reviews');
+var reward = require('./lib/reward');
 
 const MAGENTO_API_VERSION = 'V1';
 
@@ -51,6 +52,7 @@ module.exports.Magento2Client = function (options) {
     instance.orders = orders(client);
     instance.directory = directory(client);
     instance.reviews = reviews(client);
+    instance.reward = reward(client);
 
     return instance;
 }
