@@ -8,12 +8,15 @@ import review from './review';
 import cart from './cart';
 import product from './product';
 import sync from './sync';
+import reward from './reward';
+import giftcard from './giftcard';
+import newsletter from './newsletter';
 
 export default ({ config, db }) => {
 	let api = Router();
 
 	// mount the catalog resource
-	api.use('/catalog', catalog({ config, db }) )
+	api.use('/catalog', catalog({ config, db }))
 
 	// mount the order resource
 	api.use('/order', order({ config, db }));
@@ -36,29 +39,35 @@ export default ({ config, db }) => {
 	// mount the sync resource
 	api.use('/sync', sync({ config, db }))
 
+	api.use('/reward', reward({ config, db }))
+
+	api.use('/giftcard', giftcard({ config, db }))
+
+	api.use('/newsletter', newsletter({ config, db }))
+
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
 		res.json({ version });
 	});
 
 	/** Register the custom extensions */
-	for(let ext of config.registeredExtensions) {
-    let entryPoint
+	for (let ext of config.registeredExtensions) {
+		let entryPoint
 
 		try {
 			entryPoint = require('./extensions/' + ext)
 		} catch (err) {
-      try {
-        entryPoint = require(ext)
-      } catch (err) {
-        console.error(err)
-      }
-    }
+			try {
+				entryPoint = require(ext)
+			} catch (err) {
+				console.error(err)
+			}
+		}
 
-    if (entryPoint) {
-      api.use('/ext/' + ext, entryPoint({ config, db }))
-      console.log('Extension ' + ext + ' registered under /ext/' + ext +' base URL')
-    }
+		if (entryPoint) {
+			api.use('/ext/' + ext, entryPoint({ config, db }))
+			console.log('Extension ' + ext + ' registered under /ext/' + ext + ' base URL')
+		}
 	}
 
 	return api;
