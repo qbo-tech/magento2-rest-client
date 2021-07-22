@@ -74,7 +74,7 @@
                             },
                             "company": {
                                 "type": "string",
-                                "minLength": 1
+                                "minLength": 0
                             },
                             "vat_id": {
                                 "type": "string",
