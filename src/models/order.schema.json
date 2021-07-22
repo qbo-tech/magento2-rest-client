@@ -10,7 +10,7 @@
     "status": { "type": "string" },
     "state": { "type": "string" },
     "user_id": { "type": "string" },
-    "cart_id": { "type": "string" },
+    "cart_id": { "pattern":"[a-z0-9]" },
     "store_code": { "type": "string" },
     "store_id": { "type": "number" },
     "products": {
