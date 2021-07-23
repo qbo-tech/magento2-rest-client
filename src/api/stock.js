@@ -23,7 +23,8 @@ export default ({ config, db }) => {
 			return apiStatus(res, 'sku parameter is required', 500);
 
 		stockProxy.check(req.params.sku).then((result) => {
-			apiStatus(res, result, 200);
+                        let _result = ["qty", result];
+			apiStatus(res, _result, 200);
 		}).catch(err=> {
 			apiStatus(res, err, 500);
 		})
@@ -40,7 +41,9 @@ export default ({ config, db }) => {
 			return apiStatus(res, 'sku parameter is required', 500);
 
 		stockProxy.check(req.query.sku).then((result) => {
-			apiStatus(res, result, 200);
+                        let _result = {"is_in_stock": result};
+
+			apiStatus(res, _result, 200);
 		}).catch(err=> {
 			apiStatus(res, err, 500);
 		})
